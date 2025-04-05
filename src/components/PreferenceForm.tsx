@@ -21,6 +21,14 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
     setLoading(true);
 
     try {
+      console.log('Sending request with preferences:', {
+        room_type: roomType,
+        style,
+        size,
+        budget,
+        image_url: imageUrl || undefined,
+      });
+      
       const data = await getRecommendations({
         room_type: roomType,
         style,
@@ -29,10 +37,11 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
         image_url: imageUrl || undefined,
       });
       
+      console.log('Received recommendations:', data);
       setRecommendations(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching recommendations:', err);
-      setError('Failed to fetch recommendations. Please try again.');
+      setError(`Failed to fetch recommendations: ${err.message || 'Unknown error'}. Please try again.`);
       setRecommendations(null);
     } finally {
       setLoading(false);
@@ -104,16 +113,16 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
             <input
               type="range"
               id="budget"
-              min="50"
-              max="1000"
+              min="250"
+              max="5000"
               step="50"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
               className="w-full"
             />
             <div className="flex justify-between text-xs text-gray-500">
-              <span>$50</span>
-              <span>$1000</span>
+              <span>$250</span>
+              <span>$5000</span>
             </div>
           </div>
         </div>
@@ -136,7 +145,7 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
           </p>
         </div>
 
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+        {error && <div className="text-red-500 mb-4 p-3 bg-red-50 rounded border border-red-200">{error}</div>}
 
         <div className="text-center">
           <button
