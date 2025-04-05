@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RecommendationResponse } from '../App';
-import { getRecommendations } from '../services/api';
+import { getRecommendations, checkServerConnection } from '../services/api';
 
 interface PreferenceFormProps {
   setRecommendations: React.Dispatch<React.SetStateAction<RecommendationResponse | null>>;
@@ -14,11 +14,33 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
   const [budget, setBudget] = useState(1500);
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
+  const [serverConnected, setServerConnected] = useState<boolean | null>(null);
+
+  // Check server connection on component mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      const isConnected = await checkServerConnection();
+      setServerConnected(isConnected);
+      if (!isConnected) {
+        setError('Cannot connect to the recommendation server. Please try again later.');
+      }
+    };
+    
+    checkConnection();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    // Check server connection again before submitting
+    const isConnected = await checkServerConnection();
+    if (!isConnected) {
+      setError('Cannot connect to the server. Please check your internet connection or try again later.');
+      setLoading(false);
+      return;
+    }
 
     try {
       console.log('Sending request with preferences:', {
@@ -50,6 +72,12 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
+      {serverConnected === false && (
+        <div className="mb-4 p-3 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded">
+          ⚠️ The recommendation server is currently unavailable. Recommendations may not work at this time.
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Room Type Selection */}
@@ -151,6 +179,7 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
           <button
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300"
+            disabled={serverConnected === false}
           >
             Get Recommendations
           </button>
