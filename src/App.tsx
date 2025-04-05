@@ -137,7 +137,7 @@ function App() {
 
       <footer className="bg-gray-800 text-white py-8 mt-24">
         <div className="container mx-auto px-4 text-center">
-          <p>© 2023 FurnCart: AI Furniture Recommender + Cart Generator</p>
+          <p>© 2025 FurnCart: IKEA Furniture Recommender + Cart Generator</p>
         </div>
       </footer>
     </div>

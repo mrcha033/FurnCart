@@ -104,16 +104,16 @@ const PreferenceForm: React.FC<PreferenceFormProps> = ({ setRecommendations, set
             <input
               type="range"
               id="budget"
-              min="250"
-              max="5000"
+              min="50"
+              max="1000"
               step="50"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
               className="w-full"
             />
             <div className="flex justify-between text-xs text-gray-500">
-              <span>$250</span>
-              <span>$5000</span>
+              <span>$50</span>
+              <span>$1000</span>
             </div>
           </div>
         </div>

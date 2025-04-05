@@ -10,7 +10,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold">FurnCart</h1>
-          <span className="ml-2 text-sm">AI Furniture Recommender</span>
+          <span className="ml-2 text-sm">IKEA Furniture Recommender</span>
         </div>
         
         <div className="flex items-center">
