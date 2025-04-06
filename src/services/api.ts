@@ -8,6 +8,7 @@ export interface PreferenceInput {
   size: string;
   budget: number;
   image_url?: string;
+  image_data?: string;
 }
 
 export const checkServerConnection = async (): Promise<boolean> => {
